@@ -41,38 +41,36 @@
 </body>
 
 <script>
-  let randomNumber = Math.random() * 10;
-
-  const ATTEMPS = 5;
+  //variables la primera es para generar el numero randon, la siguiente es para dar el limite de intentos y contantes
+  let randomNumber = Math.floor(Math.random() * 100) + 1;
+  const ATTEMPS = 10;
+  let guessCount = 1;
   const guesses = document.querySelector('.guesses');
   const lastResult = document.querySelector('.lastResult');
-  const lowOrHi = document.querySelector('lowOrHi');
+  const lowOrHi = document.querySelector('.lowOrHi');
   const guessSubmit = document.querySelector('.guessSubmit');
-  const guessField = document.querySelector('.guessField');
-
-  let guessCount = 1;
+  const guessField = document.querySelector('.guessField'); 
   let resetButton;
 
+  //esta funcion nos sirve para verificar el numero ingresado 
   function checkGuess() {
-
-    let userGuess = guessField.value;
+    let userGuess = parseInt(guessField.value, 10);
     if(guessCount === 1) {
       guesses.textContent = 'Número aleatorio anterior: ';
     }
     guesses.textContent += userGuess + ' ';
-
+      //condicion a seguir para ver si gana o pierde
     if(userGuess === randomNumber) {
-      lastResult.textContent = '!!!Pérdistes!!!';
-      lastResult.style.backgroundColor = 'black';
-      lowOrHi.textContent = '';
+      lastResult.textContent = 'Felicitaciones! Adivinaste el número!';
+      lastResult.style.backgroundColor = 'green';
       setGameOver();
     } else if(guessCount === ATTEMPS) {
-      lastResult.textContent = 'Felicitaciones! adivinaste el número!';
-      lastResult.style.backgroundColor = 'red';
+      lastResult.textContent = '!!!Pérdistes!!!';
+      lastResult.style.backgroundColor = 'black';
       setGameOver();
     } else {
       lastResult.textContent = 'Incorrecto! ';
-      lastResult.style.backgroundColor = 'green';
+      lastResult.style.backgroundColor = 'red';
       if(userGuess < randomNumber) {
         lowOrHi.textContent = 'El número es mayor!';
       } else if(userGuess > randomNumber) {
@@ -84,34 +82,34 @@
     guessField.value = '';
     guessField.focus();
   }
-  guessSubmit.addeventListener('click', checkGuess);
 
+//este es el boton el que nos envia el numero a adivinar
+  guessSubmit.addEventListener('click', checkGuess);
+
+  //funcion para manejar el fin el juego 
   function setGameOver() {
 	  guessField.disabled = true;
 	  guessSubmit.disabled = true;
 	  resetButton = document.createElement('button');
 	  resetButton.textContent = 'Comienza un nuevo juego';
 	  document.body.appendChild(resetButton);
-	  resetButton.addeventListener('click', resetGame);
+	  resetButton.addEventListener('click', resetGame);
   }
 
+  //funcion para reiniciar el juego
   function resetGame() {
 	  guessCount = 1;
-
 	  const resetParas = document.querySelectorAll('.resultParas p');
 	  for(let i = 0; i < resetParas.length; i++) {
 		  resetParas[i].textContent = '';
 	  }
 	  resetButton.parentNode.removeChild(resetButton);
-
 	  guessField.disabled = false;
 	  guessSubmit.disabled = false;
 	  guessField.value = '';
 	  guessField.focus();
-
 	  lastResult.style.backgroundColor = 'white';
-
-	  randomNumber = Math.floor(Math.random()) + 1;
+	  randomNumber = Math.floor(Math.random() * 100) + 1;
   }
 </script>
 </html>
